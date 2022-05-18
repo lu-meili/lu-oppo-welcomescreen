@@ -1,11 +1,14 @@
 <template>
   <div id="app">
     <h1 class="header">Welcome to Opportunity</h1>
-    <span class="headerdate">{{ currentDate }} </span>
+    <h2 class="headerdate">{{ currentDate() }}</h2>
+    <!--<p id="noEntries" v-if="!value">No appointments today!</p>  else is also missing to finish this-->
 
     <ul>
       <li class="unlist bluebox" v-for="event in entries" :key="event.id">
-        <span class="hour"> {{ event[0] }} {{ event[1] }}</span>
+        <span class="hour">
+          {{ event[0] }} - {{ event[1].replaceAll("/", " .") }}
+        </span>
         <h3 class="activity">{{ event[2] }}</h3>
         <span class="who"> {{ event[3] }} </span>
       </li>
@@ -35,7 +38,6 @@ export default {
       sheet_id: "1a81aI0Y8ViZO0tI92h2YSMqVQJ8hmNNMyMylXgvwiU4",
       api_token: "AIzaSyA-qeDXOhEeQDA0vQf7LgkF7DQtGnAtmAU",
       entries: [],
-      D: "",
     };
   },
   computed: {
@@ -50,6 +52,18 @@ export default {
       axios.get(this.gsheet_url).then((response) => {
         this.entries = response.data.valueRanges[0].values;
       });
+    },
+
+    currentDate() {
+      const current = new Date();
+      const day = current.getDate();
+      const month = current.getMonth() + 1;
+      const year = current.getFullYear();
+      const dateTime = day + "." + month + "." + year;
+      if (month < 10) {
+        return day + "." + "0" + month + "." + year;
+      }
+      return dateTime;
     },
   },
 
@@ -80,17 +94,23 @@ body {
   font-size: 62px;
   line-height: 75px;
   color: #323d4a;
+  padding-left: 80px;
+  padding-top: 60px;
 }
 .headerdate {
   font-weight: 500;
   font-size: 62px;
   line-height: 75px;
   color: #9aa7b1;
+  padding-left: 80px;
 }
 
 .bluebox {
   background: #0f05a0;
   margin: 40px;
+  padding-left: 60px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .hour {
