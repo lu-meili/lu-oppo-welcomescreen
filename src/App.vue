@@ -7,7 +7,7 @@
     <ul>
       <li class="unlist bluebox" v-for="event in entries" :key="event.id">
         <span class="hour">
-          {{ event[0] }} - {{ event[1].replaceAll("/", " .") }}
+          {{ event[0] }} - {{ event[1].replaceAll("/", ".") }}
         </span>
         <h3 class="activity">{{ event[2] }}</h3>
         <span class="who"> {{ event[3] }} </span>
@@ -69,8 +69,10 @@ export default {
 
   mounted() {
     this.getData();
-  },
-};
+    setInterval(this.refreshData(), 18000000);  ///1000*60*30
+},
+}
+
 </script>
 
 <style>
